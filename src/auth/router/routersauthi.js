@@ -1,4 +1,19 @@
-"use strict";
+'use strict';
+
+const express = require('express');
+const authRouter = express.Router();
+
+const basic = require('../middleware/basic.js');
+const bearer = require('../middleware/bearer.js');
+const permissions = require('../middleware/acl.js')
+
+
+
+authRouter.get('/', handelhome);
+authRouter.post('/signup', handleSignup);
+authRouter.post('/signin', basic, handleSignin);
+authRouter.get('/secret', bearer, handleSecret);
+authRouter.get('/users', bearer,  permissions('delete'), handleGetUsers);
 
 const { users } = require("../../index");
 
@@ -59,13 +74,4 @@ function handleSecret(req, res, next) {
   res.status(200).send("Welcome to the secret area!");
 }
 
-
-
-module.exports = {
-  
-  handelhome,
-  handleSignup,
-  handleSignin,
-  handleGetUsers,
-  handleSecret,
-};
+module.exports = authRouter;
