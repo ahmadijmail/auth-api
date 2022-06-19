@@ -1,7 +1,5 @@
 'use strict';
 
-process.env.SECRET = "TEST_SECRET";
-
 
 const { db } = require('../src/index');
 const supertest = require('supertest');
@@ -26,7 +24,7 @@ afterAll(async () => {
 
 describe('Auth Router', () => {
 
-  it('creates a new user and sends an object with the user and the token to the client', async () => {
+  it('signup creates a new user and sends an object', async () => {
 
     const response = await mockRequest.post('/signup').send(userData.testUser);
     const userObject = response.body;
@@ -39,7 +37,7 @@ describe('Auth Router', () => {
     expect(userObject.username).toEqual(userData.testUser.username);
   });
 
-  it('signin with basic authentication headers logs in a user and sends an object with the user and the token to the client', async () => {
+  it('signin with basic authentication headers logs in a user and sends an object', async () => {
     let { username, password } = userData.testUser;
 
     const response = await mockRequest.post('/signin')
@@ -55,7 +53,7 @@ describe('Auth Router', () => {
 
    
 
-  it('3 Can signin with bearer auth token', async () => {
+  it(' Can signin with bearer auth token', async () => {
     let { username, password } = userData.testUser;
 
     const response = await mockRequest.post('/signin')
@@ -67,7 +65,7 @@ describe('Auth Router', () => {
     expect(bearerResponse.status).toBe(201);
   });
 
-  it('can add a food', async () => {
+  it('with a bearer token that has create permissions adds an item to the DB', async () => {
     const response = await mockRequest.post('/api/v2/food').set('Authorization', `Bearer ${accessToken}`).send({
         name:'ahmad',
         calories:'ijmail',
@@ -78,86 +76,29 @@ describe('Auth Router', () => {
 });
 
    // test if can read
-   test('can get all food', async () => {
+   test('with a bearer token that has read permissions returns a list of :model items', async () => {
     const response = await mockRequest.get('/api/v2/food').set('Authorization', `Bearer ${accessToken}`);
     expect(response.status).toBe(200);
 
 });
 
 
-test('can get one food', async () => {
+test('with a bearer token that has read permissions returns a single item by ID', async () => {
   const response = await mockRequest.get('/api/v2/food/1').set('Authorization', `Bearer ${accessToken}`);
   expect(response.status).toBe(200);
 
 });
 
  
-test('can update a record', async () => {
+test('with a bearer token that has update permissions returns a single, updated item by ID', async () => {
   const response = await mockRequest.put('/api/v2/food/1').set('Authorization', `Bearer ${accessToken}`);
   expect(response.status).toBe(201);
 });
   
-test('can delete a record', async () => {
+test('with a bearer token that has delete permissions returns an empty object. Subsequent GET for the same ID should result in nothing found', async () => {
   const response = await mockRequest.delete('/api/v2/food/1').set('Authorization', `Bearer ${accessToken}`);
   expect(response.status).toBe(204);
 });
 
 
-
-
-  // it('4 basic fails with known user and wrong password ', async () => {
-
-  //   const response = await mockRequest.post('/signin')
-  //     .auth('admin', 'xyz')
-  //   const { user, token } = response.body;
-
-  //   expect(response.status).toBe(403);
-  //   expect(response.text).toEqual("Invalid Login");
-  //   expect(user).not.toBeDefined();
-  //   expect(token).not.toBeDefined();
-  // });
-
-  // it('5 basic fails with unknown user', async () => {
-
-  //   const response = await mockRequest.post('/signin')
-  //     .auth('nobody', 'xyz')
-  //   const { user, token } = response.body;
-
-  //   expect(response.status).toBe(403);
-  //   expect(response.text).toEqual("Invalid Login");
-  //   expect(user).not.toBeDefined();
-  //   expect(token).not.toBeDefined();
-  // });
-
-  // it('6 bearer fails with an invalid token', async () => {
-
-  //   // First, use basic to login to get a token
-  //   const response = await mockRequest.get('/users')
-  //     .set('Authorization', `Bearer foobar`)
-  //   const userList = response.body;
-
-  //   // Not checking the value of the response, only that we "got in"
-  //   expect(response.status).toBe(500);
-  //   expect(userList.length).toBeFalsy();
-  // });
-
-  // it('7 Succeeds with a valid token', async () => {
-
-  //   const response = await mockRequest.get('/users')
-  //     .set('Authorization', `Bearer ${accessToken}`);
-
-  //   expect(response.status).toBe(201);
-  //   expect(response.body).toBeTruthy();
-  //   expect(response.body).toEqual(expect.anything());
-  // });
-
-  // it('8 Secret Route fails with invalid token', async () => {
-  //   const validToken='dsugcsjmhtcvbmjhxj2hmgv mahgv'
-  //   const response =await  mockRequest.get('/secret')
-  //     .set('Authorization', `x ${validToken}`);
- 
-
-  //   expect(response.status).toBe(500);
-  
-  // },20000);
 });
