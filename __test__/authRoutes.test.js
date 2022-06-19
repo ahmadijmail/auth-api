@@ -35,7 +35,7 @@ describe('Auth Router', () => {
     expect(userObject.id).toBeDefined();
     expect(userObject.role).toBeDefined();
     expect(userObject.username).toEqual(userData.testUser.username);
-  });
+  },30000);
 
   it('signin with basic authentication headers logs in a user and sends an object', async () => {
     let { username, password } = userData.testUser;
@@ -49,7 +49,7 @@ describe('Auth Router', () => {
     expect(userObject.user.id).toBeDefined();
     expect(userObject.user.role).toBeDefined();
     expect(userObject.user.username).toEqual(username);
-  });
+  },30000);
 
    
 
@@ -63,7 +63,7 @@ describe('Auth Router', () => {
       .get('/users')
       .set('Authorization', `Bearer ${accessToken}`);
     expect(bearerResponse.status).toBe(201);
-  });
+  },30000);
 
   it('with a bearer token that has create permissions adds an item to the DB', async () => {
     const response = await mockRequest.post('/api/v2/food').set('Authorization', `Bearer ${accessToken}`).send({
