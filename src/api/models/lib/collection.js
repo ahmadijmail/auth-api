@@ -12,7 +12,7 @@ class Collection {
       let newRecord = await this.model.create(obj);
       return newRecord;
     } catch (e) {
-      console.error("error in creating a new record in model ", this.model);
+      console.log("error in creating a new record in model ", this.model);
     }
   }
   async read(data_id) {
@@ -32,7 +32,7 @@ class Collection {
         return record;
       }
     } catch (e) {
-      console.error("error in reading record in model ", this.model);
+      console.log("error in reading record in model ", this.model);
     }
   }
   async update(obj) {
@@ -41,7 +41,7 @@ class Collection {
       let updated = await record.update(obj);
       return updated;
     } catch (e) {
-      console.error("error in updating record in model ", this.model);
+      console.log("error in updating record in model ", this.model);
     }
   }
   async delete(data_id) {
@@ -52,7 +52,7 @@ class Collection {
       let deleted = await this.model.destroy({ where: { id: data_id } });
       return deleted;
     } catch (e) {
-      console.error("error in deleting record in model ", this.model);
+      console.log("error in deleting record in model ", this.model);
     }
   }
 }
