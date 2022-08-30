@@ -33,7 +33,7 @@ async function handleSignup(req, res, next) {
         });
 
         const output = {
-          user: userRecord,
+          user: userRecord.user,
           token: userRecord.token,
         };
 
